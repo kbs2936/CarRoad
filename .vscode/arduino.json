@@ -1,5 +1,5 @@
 {
-    "configuration": "pnum=GENERIC_F103C8TX,upload_method=swdMethod,xserial=generic,usb=none,xusb=FS,opt=osstd,dbg=none,rtlib=nano",
+    "configuration": "pnum=GENERIC_F103C6TX,upload_method=swdMethod,xserial=generic,usb=none,xusb=FS,opt=osstd,dbg=none,rtlib=nano",
     "board": "STMicroelectronics:stm32:GenF1",
     "sketch": "CarRoad.ino"
 }

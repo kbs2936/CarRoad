@@ -2,6 +2,7 @@
 
 #define LED_PIN PA12
 #define BTN_PIN PB4
+#define BOARD_LED_PIN PC13
 
 int btnCount = 0;
 
@@ -11,9 +12,10 @@ int btnCount = 0;
 void setup()
 {
     // LED和按键引脚定义，默认上拉，低电平有效
-    pinMode(LED_PIN, OUTPUT);
-    pinMode(BTN_PIN, INPUT);
-    attachInterrupt(BTN_PIN, btnHandler, FALLING);
+    // pinMode(LED_PIN, OUTPUT);
+    // pinMode(BTN_PIN, INPUT);
+    pinMode(BOARD_LED_PIN, OUTPUT);
+    // attachInterrupt(BTN_PIN, btnHandler, LOW);
 }
 
 /**
@@ -21,11 +23,20 @@ void setup()
  */
 void loop()
 {
-    if (btnCount == 1)
-    {
-        btnCount = 2;
-        
-    }
+    // if (btnCount > 0)
+    // {
+    //     // btnCount = 2;
+    //     // delay(1000);
+    //     digitalWrite(LED_PIN, LOW);
+    //     digitalWrite(BOARD_LED_PIN, LOW);
+    //     delay(1000);
+    //     return;
+    // }
+
+    digitalWrite(BOARD_LED_PIN, HIGH);
+    delay(1000);
+    digitalWrite(BOARD_LED_PIN, LOW);
+    delay(1000);
 }
 
 /**
@@ -33,6 +44,5 @@ void loop()
  */
 void btnHandler()
 {
-    digitalWrite(LED_PIN, LOW);
     btnCount++;
 }
