@@ -67,6 +67,12 @@ void loop()
                 {
                     break;
                 }
+                //转弯过程中如果3灯同时遇到黑线，说明是在T横线处转弯，判定停止
+                else if ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH))
+                {
+                    clear();
+                    break;
+                }
             }
         }
         //右边遇黑线，车头左倾，要右转直到正向
@@ -79,14 +85,18 @@ void loop()
                 {
                     break;
                 }
+                //转弯过程中如果3灯同时遇到黑线，说明是在T横线处转弯，判定停止
+                else if ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH))
+                {
+                    clear();
+                    break;
+                }
             }
         }
         //左中右3边同时遇到黑线，说明走到T形横线处，停止小车
         else if ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH))
         {
-            carStop();
-            ledOff();
-            btnCount = 0;
+            clear();
         }
         //其他情况小车正常前进
         else
@@ -102,6 +112,17 @@ void loop()
 void btnHandler()
 {
     btnCount++;
+    delay(1000);
+}
+
+/**
+ * @description: 停车、关灯、重置计数器
+ */
+void clear()
+{
+    carStop();
+    ledOff();
+    btnCount = 0;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -154,7 +175,7 @@ void carStop()
 void carTurnRight()
 {
     digitalWrite(RIGHT0, LOW);
-    digitalWrite(RIGHT1, LOW);
+    digitalWrite(RIGHT1, HIGH);
 
     digitalWrite(LEFT0, HIGH);
     digitalWrite(LEFT1, LOW);
@@ -169,5 +190,5 @@ void carTurnLeft()
     digitalWrite(RIGHT1, LOW);
 
     digitalWrite(LEFT0, LOW);
-    digitalWrite(LEFT1, LOW);
+    digitalWrite(LEFT1, HIGH);
 }
