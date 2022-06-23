@@ -44,7 +44,6 @@
                 "/Users/apple/Library/Arduino15/packages/STMicroelectronics/tools/CMSIS/5.7.0/CMSIS/DSP/PrivateInclude",
                 "/Users/apple/Library/Arduino15/packages/STMicroelectronics/hardware/stm32/2.2.0/cores/arduino",
                 "/Users/apple/Library/Arduino15/packages/STMicroelectronics/hardware/stm32/2.2.0/variants/STM32F1xx/F103C4T_F103C6(T-U)",
-                "/Users/apple/Documents/Arduino/libraries/MX1508",
                 "/Users/apple/Library/Arduino15/packages/STMicroelectronics/hardware/stm32/2.2.0/libraries/SrcWrapper/src",
                 "/Users/apple/Library/Arduino15/packages/STMicroelectronics/tools/xpack-arm-none-eabi-gcc/10.3.1-2.3/arm-none-eabi/include/c++/10.3.1",
                 "/Users/apple/Library/Arduino15/packages/STMicroelectronics/tools/xpack-arm-none-eabi-gcc/10.3.1-2.3/arm-none-eabi/include/c++/10.3.1/arm-none-eabi",
