@@ -52,22 +52,47 @@ void setup()
  */
 void loop()
 {
-    if (btnCount == 1)
-    {
-    }
-    else if (btnCount >= 2)
-    {
-        btnCount = 0;
-    }
-    delay(100);
-
-    if (LEFT_STAT == HIGH)
+    //按键按下，亮灯开始循线前进，默认中间红外传感器在黑线位置
+    if (btnCount >= 1)
     {
         ledOn();
-    }
-    else
-    {
-        ledOff();
+
+        //左边遇黑线，车头右倾，要左转直到正向
+        if ((LEFT_STAT == HIGH) && (RIGHT_STAT == LOW))
+        {
+            while (1)
+            {
+                carTurnLeft();
+                if ((LEFT_STAT == LOW) && (RIGHT_STAT == LOW) && (MID_STAT == HIGH))
+                {
+                    break;
+                }
+            }
+        }
+        //右边遇黑线，车头左倾，要右转直到正向
+        else if ((LEFT_STAT == LOW) && (RIGHT_STAT == HIGH))
+        {
+            while (1)
+            {
+                carTurnRight();
+                if ((LEFT_STAT == LOW) && (RIGHT_STAT == LOW) && (MID_STAT == HIGH))
+                {
+                    break;
+                }
+            }
+        }
+        //左中右3边同时遇到黑线，说明走到T形横线处，停止小车
+        else if ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH))
+        {
+            carStop();
+            ledOff();
+            btnCount = 0;
+        }
+        //其他情况小车正常前进
+        else
+        {
+            carForward();
+        }
     }
 }
 
