@@ -20,8 +20,18 @@
 #define RIGHT_STAT digitalRead(IR_RIGHT)
 
 //前进和转弯的pwm数值宏定义(0~255)，数值越高占空比越大
-#define PWM_FOWARD 100
-#define PWM_TURN 100
+#define PWM_FOWARD 105
+#define PWM_TURN 105
+
+//小车方向枚举，左中右
+typedef enum
+{
+    CarDirMid = 0,
+    CarDirLeft = 1,
+    CarDirRight = 2
+} CarDir;
+
+CarDir carDir = CarDirMid;
 
 //按键中断计数器
 int btnCount = 0;
@@ -73,7 +83,7 @@ void loop()
                 if (isCarMiddle())
                 {
                     carStop();
-                    carForward();
+                    carDir = CarDirLeft; //再前进可能3灯往左偏航
                     break;
                 }
                 //转弯过程中如果3灯同时遇到黑线，说明是在T横线处转弯，判定停止
@@ -96,7 +106,7 @@ void loop()
                 if (isCarMiddle())
                 {
                     carStop();
-                    carForward();
+                    carDir = CarDirRight; //再前进可能3灯往右偏航
                     break;
                 }
                 //转弯过程中如果3灯同时遇到黑线，说明是在T横线处转弯，判定停止
@@ -105,6 +115,43 @@ void loop()
                     clear();
                     break;
                 }
+            }
+        }
+        // 3灯同时亮，说明车头整体脱离黑线了，根据偏航方向往回调整
+        else if (isCarOffLine())
+        {
+            if (carDir == CarDirRight)
+            {
+                carStop();
+                while (1)
+                {
+                    carTurnLeft();
+                    if (isCarMiddle())
+                    {
+                        carStop();
+                        carDir = CarDirLeft;
+                        break;
+                    }
+                }
+            }
+            else if (carDir == CarDirLeft)
+            {
+                carStop();
+                while (1)
+                {
+                    carTurnRight();
+                    if (isCarMiddle())
+                    {
+                        carStop();
+                        carDir = CarDirRight;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                carDir = CarDirMid;
+                carForward();
             }
         }
         //左中右3边同时遇到黑线，说明走到T形横线处，停止小车
@@ -136,6 +183,7 @@ void clear()
 {
     carStop();
     ledOff();
+    carDir = CarDirMid;
     btnCount = 0;
 }
 
@@ -196,6 +244,16 @@ bool isCarReachEnd()
 {
     // 3线遇黑，或者3线同时反射，判定达到T终点
     return ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH));
+}
+
+/**
+ * @description: 车头是否整体脱离黑线
+ * @return true/false
+ */
+bool isCarOffLine()
+{
+    // 3灯全亮，说明车头已经整体脱离黑线了
+    return ((LEFT_STAT == LOW) && (RIGHT_STAT == LOW) && (MID_STAT == LOW));
 }
 
 //---------------------------------------------------------------------------------------------------------------------
