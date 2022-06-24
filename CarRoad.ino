@@ -19,6 +19,10 @@
 #define MID_STAT digitalRead(IR_MID)
 #define RIGHT_STAT digitalRead(IR_RIGHT)
 
+//前进和转弯的pwm数值宏定义(0~255)，数值越高占空比越大
+#define PWM_FOWARD 100
+#define PWM_TURN 100
+
 //按键中断计数器
 int btnCount = 0;
 
@@ -200,11 +204,11 @@ bool isCarReachEnd()
  */
 void carForward()
 {
-    digitalWrite(RIGHT0, HIGH);
-    digitalWrite(RIGHT1, LOW);
+    analogWrite(RIGHT0, PWM_FOWARD);
+    analogWrite(RIGHT1, 0);
 
-    digitalWrite(LEFT0, HIGH);
-    digitalWrite(LEFT1, LOW);
+    analogWrite(LEFT0, PWM_FOWARD);
+    analogWrite(LEFT1, 0);
 }
 
 /**
@@ -212,14 +216,14 @@ void carForward()
  */
 void carStop()
 {
-    digitalWrite(RIGHT0, LOW);
-    digitalWrite(RIGHT1, LOW);
+    analogWrite(RIGHT0, 0);
+    analogWrite(RIGHT1, 0);
 
-    digitalWrite(LEFT0, LOW);
-    digitalWrite(LEFT1, LOW);
+    analogWrite(LEFT0, 0);
+    analogWrite(LEFT1, 0);
 
     //小车移动有惯性，所以停止后要延时等一会儿
-    delay(300);
+    delay(500);
 }
 
 /**
@@ -229,11 +233,11 @@ void carTurnRight()
 {
     // digitalWrite(RIGHT0, LOW);
     // digitalWrite(RIGHT1, HIGH);
-    digitalWrite(RIGHT0, LOW);
-    digitalWrite(RIGHT1, LOW);
+    analogWrite(RIGHT0, 0);
+    analogWrite(RIGHT1, 0);
 
-    digitalWrite(LEFT0, HIGH);
-    digitalWrite(LEFT1, LOW);
+    analogWrite(LEFT0, PWM_TURN);
+    analogWrite(LEFT1, 0);
 }
 
 /**
@@ -241,11 +245,11 @@ void carTurnRight()
  */
 void carTurnLeft()
 {
-    digitalWrite(RIGHT0, HIGH);
-    digitalWrite(RIGHT1, LOW);
+    analogWrite(RIGHT0, PWM_TURN);
+    analogWrite(RIGHT1, 0);
 
     // digitalWrite(LEFT0, LOW);
     // digitalWrite(LEFT1, HIGH);
-    digitalWrite(LEFT0, LOW);
-    digitalWrite(LEFT1, LOW);
+    analogWrite(LEFT0, 0);
+    analogWrite(LEFT1, 0);
 }
