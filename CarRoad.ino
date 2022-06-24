@@ -57,36 +57,46 @@ void loop()
     {
         ledOn();
 
-        //左边遇黑线，车头右倾，要左转直到正向
-        if ((LEFT_STAT == HIGH) && (RIGHT_STAT == LOW))
+        //车头右倾，要左转直到正向
+        if (isCarRight())
         {
+            //转弯前先停止，消除惯性抖动
+            carStop();
+
             while (1)
             {
                 carTurnLeft();
-                if ((LEFT_STAT == LOW) && (RIGHT_STAT == LOW) && (MID_STAT == HIGH))
+                if (isCarMiddle())
                 {
+                    carStop();
+                    carForward();
                     break;
                 }
                 //转弯过程中如果3灯同时遇到黑线，说明是在T横线处转弯，判定停止
-                else if ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH))
+                else if (isCarReachEnd())
                 {
                     clear();
                     break;
                 }
             }
         }
-        //右边遇黑线，车头左倾，要右转直到正向
-        else if ((LEFT_STAT == LOW) && (RIGHT_STAT == HIGH))
+        //车头左倾，要右转直到正向
+        else if (isCarLeft())
         {
+            //转弯前先停止，消除惯性抖动
+            carStop();
+
             while (1)
             {
                 carTurnRight();
-                if ((LEFT_STAT == LOW) && (RIGHT_STAT == LOW) && (MID_STAT == HIGH))
+                if (isCarMiddle())
                 {
+                    carStop();
+                    carForward();
                     break;
                 }
                 //转弯过程中如果3灯同时遇到黑线，说明是在T横线处转弯，判定停止
-                else if ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH))
+                else if (isCarReachEnd())
                 {
                     clear();
                     break;
@@ -94,7 +104,7 @@ void loop()
             }
         }
         //左中右3边同时遇到黑线，说明走到T形横线处，停止小车
-        else if ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH))
+        else if (isCarReachEnd())
         {
             clear();
         }
@@ -146,6 +156,46 @@ void ledOff()
 
 //---------------------------------------------------------------------------------------------------------------------
 /**
+ * @description: 车头是否右倾
+ * @return true/false
+ */
+bool isCarRight()
+{
+    //左边遇黑线，车头右倾
+    return ((LEFT_STAT == HIGH) && (RIGHT_STAT == LOW));
+}
+
+/**
+ * @description: 车头是否左倾
+ * @return true/false
+ */
+bool isCarLeft()
+{
+    //右边遇黑线，车头左倾
+    return ((LEFT_STAT == LOW) && (RIGHT_STAT == HIGH));
+}
+
+/**
+ * @description: 车头是否在黑线中间
+ * @return true/false
+ */
+bool isCarMiddle()
+{
+    return ((LEFT_STAT == LOW) && (RIGHT_STAT == LOW) && (MID_STAT == HIGH));
+}
+
+/**
+ * @description: 车头是否到达终点
+ * @return true/false
+ */
+bool isCarReachEnd()
+{
+    // 3线遇黑，或者3线同时反射，判定达到T终点
+    return ((LEFT_STAT == HIGH) && (RIGHT_STAT == HIGH) && (MID_STAT == HIGH));
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/**
  * @description: 小车前进
  */
 void carForward()
@@ -167,6 +217,9 @@ void carStop()
 
     digitalWrite(LEFT0, LOW);
     digitalWrite(LEFT1, LOW);
+
+    //小车移动有惯性，所以停止后要延时等一会儿
+    delay(300);
 }
 
 /**
@@ -174,8 +227,10 @@ void carStop()
  */
 void carTurnRight()
 {
+    // digitalWrite(RIGHT0, LOW);
+    // digitalWrite(RIGHT1, HIGH);
     digitalWrite(RIGHT0, LOW);
-    digitalWrite(RIGHT1, HIGH);
+    digitalWrite(RIGHT1, LOW);
 
     digitalWrite(LEFT0, HIGH);
     digitalWrite(LEFT1, LOW);
@@ -189,6 +244,8 @@ void carTurnLeft()
     digitalWrite(RIGHT0, HIGH);
     digitalWrite(RIGHT1, LOW);
 
+    // digitalWrite(LEFT0, LOW);
+    // digitalWrite(LEFT1, HIGH);
     digitalWrite(LEFT0, LOW);
-    digitalWrite(LEFT1, HIGH);
+    digitalWrite(LEFT1, LOW);
 }
