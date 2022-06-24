@@ -20,8 +20,8 @@
 #define RIGHT_STAT digitalRead(IR_RIGHT)
 
 //前进和转弯的pwm数值宏定义(0~255)，数值越高占空比越大
-#define PWM_FOWARD 105
-#define PWM_TURN 105
+#define PWM_FOWARD 120
+#define PWM_TURN 120
 
 //小车方向枚举，左中右
 typedef enum
