@@ -150,7 +150,6 @@ void loop()
             }
             else
             {
-                carDir = CarDirMid;
                 carForward();
             }
         }
