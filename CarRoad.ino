@@ -280,7 +280,7 @@ void carStop()
     analogWrite(LEFT1, 0);
 
     //小车移动有惯性，所以停止后要延时等一会儿
-    delay(500);
+    delay(333);
 }
 
 /**
